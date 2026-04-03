@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Learning Journey — Springboard Courses</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2B2B2B',
+        secondary: '#8E8E8E',
+        accent: '#555555',
+        surface: '#FAFAF8',
+        border: '#E6E2DB',
+        card: '#FFFFFF',
+        green: { 400: '#4ADE80', 500: '#22C55E' },
+        blue: { 400: '#60A5FA', 500: '#3B82F6' },
+        purple: { 400: '#C084FC', 500: '#A855F7' },
+        orange: { 400: '#FB923C', 500: '#F97316' },
+        teal: { 400: '#2DD4BF', 500: '#14B8A6' },
+        pink: { 400: '#F472B6', 500: '#EC4899' },
+      },
+      fontFamily: {
+        serif: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #FAFAF8; color: #2B2B2B; overflow-x: hidden; }
+
+  /* Paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Scroll reveal */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Slide navigation */
+  .slide-section { min-height: 100vh; position: relative; }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+    background: linear-gradient(90deg, #2B2B2B, #8E8E8E);
+    transition: width 0.3s ease;
+  }
+
+  /* Nav dots */
+  .nav-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #E6E2DB; border: none; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .nav-dot.active { background: #2B2B2B; transform: scale(1.3); }
+  .nav-dot:hover { background: #8E8E8E; }
+
+  /* Skill tag */
+  .skill-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 9999px;
+    border: 1px solid #E6E2DB; background: #FFFFFF;
+    font-size: 12px; font-weight: 500; color: #555555;
+    transition: all 0.2s ease;
+  }
+  .skill-tag:hover { border-color: #2B2B2B; color: #2B2B2B; transform: translateY(-1px); }
+
+  /* Timeline */
+  .timeline-line {
+    position: absolute; left: 23px; top: 0; bottom: 0; width: 1px;
+    background: linear-gradient(to bottom, #E6E2DB, transparent);
+  }
+  .timeline-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid #2B2B2B; background: #FAFAF8;
+    position: relative; z-index: 2; flex-shrink: 0;
+  }
+  .timeline-dot.filled { background: #2B2B2B; }
+
+  /* Module card */
+  .module-card {
+    background: #FFFFFF; border: 1px solid #E6E2DB; border-radius: 12px;
+    padding: 20px 24px; transition: all 0.2s ease;
+  }
+  .module-card:hover {
+    border-color: #2B2B2B;
+    box-shadow: 0 4px 20px -4px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+  }
+
+  /* Framework card */
+  .framework-card {
+    background: #FFFFFF; border: 1px solid #E6E2DB; border-radius: 16px;
+    padding: 32px; transition: all 0.3s ease; position: relative; overflow: hidden;
+  }
+  .framework-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: #2B2B2B; transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .framework-card:hover::before { transform: scaleX(1); }
+  .framework-card:hover {
+    border-color: #2B2B2B;
+    box-shadow: 0 8px 30px -8px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #2B2B2B 0%, #8E8E8E 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Keyboard hint */
+  .kbd {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 2px 8px; border-radius: 6px; font-size: 11px;
+    background: #FFFFFF; border: 1px solid #E6E2DB; color: #8E8E8E;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Animated counter */
+  @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .count-anim { animation: countUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  /* Floating badge */
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .float-anim { animation: float 3s ease-in-out infinite; }
+
+  /* Slide indicator */
+  .slide-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 120px; font-weight: 400; line-height: 1;
+    color: rgba(230, 226, 219, 0.4); position: absolute;
+    right: -20px; top: -20px; pointer-events: none;
+    user-select: none;
+  }
+
+  /* Career card */
+  .career-card {
+    background: #FFFFFF; border: 1px solid #E6E2DB; border-radius: 12px;
+    padding: 24px; transition: all 0.25s ease; cursor: default;
+  }
+  .career-card:hover {
+    border-color: #2B2B2B;
+    box-shadow: 0 8px 30px -8px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+  }
+
+  /* Scroll smooth */
+  html { scroll-behavior: smooth; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #E6E2DB; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8E8E8E; }
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width: 0%"></div>
+
+<!-- Fixed Nav Dots -->
+<nav class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 hidden md:flex" id="nav-dots">
+  <button class="nav-dot active" data-slide="0" title="Title"></button>
+  <button class="nav-dot" data-slide="1" title="Data Science"></button>
+  <button class="nav-dot" data-slide="2" title="Modules"></button>
+  <button class="nav-dot" data-slide="3" title="Big Data"></button>
+  <button class="nav-dot" data-slide="4" title="Frameworks"></button>
+  <button class="nav-dot" data-slide="5" title="Skills & Careers"></button>
+  <button class="nav-dot" data-slide="6" title="Summary"></button>
+</nav>
+
+<!-- ==================== SLIDE 0: TITLE ==================== -->
+<section class="slide-section flex items-center justify-center relative" id="slide-0">
+  <!-- Decorative blurred circles -->
+  <div class="absolute top-20 left-10 w-64 h-64 bg-border/30 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 right-10 w-80 h-80 bg-border/20 rounded-full blur-3xl"></div>
+
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12 text-center relative z-10">
+    <div class="reveal-on-scroll">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-white/80 backdrop-blur mb-8 float-anim">
+        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+        <span class="text-xs font-medium text-secondary tracking-wide">COMPLETED ON SPRINGBOARD</span>
+      </div>
+
+      <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.1] mb-6">
+        My Learning<br>
+        <span class="gradient-text">Journey</span>
+      </h1>
+
+      <p class="text-secondary font-light text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+        Two comprehensive courses completed for free on Springboard — building a strong foundation in Data Science and Big Data technologies.
+      </p>
+
+      <div class="flex items-center justify-center gap-4 flex-wrap mb-12">
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:database" data-width="14"></span> Data Science</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:server-network" data-width="14"></span> Big Data</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:language-python" data-width="14"></span> Python</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:brain" data-width="14"></span> Machine Learning</span>
+      </div>
+
+      <a href="#slide-1" class="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-accent transition-colors">
+        Explore the courses
+        <span class="iconify" data-icon="mdi:arrow-down" data-width="18" style="animation: float 2s ease-in-out infinite"></span>
+      </a>
+    </div>
+
+    <!-- Stats row -->
+    <div class="reveal-on-scroll mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto" style="transition-delay: 200ms">
+      <div class="text-center">
+        <div class="font-serif text-3xl md:text-4xl font-medium text-primary">2</div>
+        <div class="text-xs text-secondary mt-1">Courses</div>
+      </div>
+      <div class="text-center">
+        <div class="font-serif text-3xl md:text-4xl font-medium text-primary">15+</div>
+        <div class="text-xs text-secondary mt-1">Topics</div>
+      </div>
+      <div class="text-center">
+        <div class="font-serif text-3xl md:text-4xl font-medium text-primary">4</div>
+        <div class="text-xs text-secondary mt-1">Frameworks</div>
+      </div>
+      <div class="text-center">
+        <div class="font-serif text-3xl md:text-4xl font-medium text-primary">Free</div>
+        <div class="text-xs text-secondary mt-1">Cost</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 1: DATA SCIENCE OVERVIEW ==================== -->
+<section class="slide-section flex items-center py-24 md:py-32" id="slide-1">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12 w-full">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <!-- Left: Text -->
+      <div class="reveal-on-scroll">
+        <div class="relative">
+          <span class="slide-number">01</span>
+          <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-4 relative z-10">COURSE ONE</span>
+        </div>
+        <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-4 relative z-10">Data Science</h2>
+        <p class="text-secondary font-light text-sm leading-relaxed mb-8 relative z-10">
+          A comprehensive introduction to data science and its advanced applications — from foundational mathematics and Python programming all the way to machine learning and deep learning.
+        </p>
+
+        <div class="space-y-3 relative z-10">
+          <div class="flex items-start gap-3">
+            <span class="iconify text-green-500 mt-0.5 flex-shrink-0" data-icon="mdi:check-circle" data-width="18"></span>
+            <span class="text-sm text-accent">Foundations: Data types, sorting, visualization, basic math, descriptive statistics</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="iconify text-green-500 mt-0.5 flex-shrink-0" data-icon="mdi:check-circle" data-width="18"></span>
+            <span class="text-sm text-accent">Python Fundamentals & simple data analysis tools</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="iconify text-green-500 mt-0.5 flex-shrink-0" data-icon="mdi:check-circle" data-width="18"></span>
+            <span class="text-sm text-accent">Advanced: Predictive modeling, model evaluation, ML & deep learning intro</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="iconify text-green-500 mt-0.5 flex-shrink-0" data-icon="mdi:check-circle" data-width="18"></span>
+            <span class="text-sm text-accent">Career paths exploration in data science</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Visual -->
+      <div class="reveal-on-scroll" style="transition-delay: 200ms">
+        <div class="relative">
+          <!-- Main image -->
+          <div class="rounded-2xl overflow-hidden border border-border shadow-lg shadow-primary/5">
+            <img src="https://picsum.photos/seed/datascience-learn/600/450.jpg" alt="Data Science" class="w-full h-auto object-cover" loading="lazy">
+          </div>
+          <!-- Floating card -->
+          <div class="absolute -bottom-6 -left-6 bg-white border border-border rounded-xl p-4 shadow-lg shadow-primary/5 float-anim">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center">
+                <span class="iconify text-primary" data-icon="mdi:chart-line" data-width="22"></span>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-primary">Full Stack</div>
+                <div class="text-[10px] text-secondary">Beginner → Advanced</div>
+              </div>
+            </div>
+          </div>
+          <!-- Small decorative -->
+          <div class="absolute -top-4 -right-4 w-20 h-20 rounded-full border border-border/50 bg-white/50 backdrop-blur-sm flex items-center justify-center float-anim" style="animation-delay: 1s">
+            <span class="iconify text-border" data-icon="mdi:chart-scatter-plot" data-width="28"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2: DATA SCIENCE MODULES ==================== -->
+<section class="slide-section py-24 md:py-32" id="slide-2">
+  <div class="max-w-[1100px] mx-auto px-6 md:px-12">
+    <div class="reveal-on-scroll text-center mb-16">
+      <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-4">CURRICULUM BREAKDOWN</span>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight">Course Modules</h2>
+    </div>
+
+    <div class="relative">
+      <!-- Timeline line -->
+      <div class="timeline-line hidden md:block"></div>
+
+      <div class="space-y-6">
+        <!-- Module 1 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot filled"></div></div>
+          <div class="module-card flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-primary">01</span>
+              <h3 class="text-sm font-medium">Foundations & Importance</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Understanding what data science is, why it matters in today's world, and the role of a data scientist across industries.</p>
+          </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 100ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot filled"></div></div>
+          <div class="module-card flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-primary">02</span>
+              <h3 class="text-sm font-medium">Data Types, Sorting & Visualization</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Structured vs unstructured data, sorting algorithms, and creating meaningful visualizations to communicate insights.</p>
+          </div>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 200ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot filled"></div></div>
+          <div class="module-card flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-primary">03</span>
+              <h3 class="text-sm font-medium">Basic Mathematics & Descriptive Statistics</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Probability, distributions, measures of central tendency, variance, and statistical thinking for data analysis.</p>
+          </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 300ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot filled"></div></div>
+          <div class="module-card flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-primary">04</span>
+              <h3 class="text-sm font-medium">Python Fundamentals</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Variables, data structures, functions, loops, and libraries like NumPy and Pandas for data manipulation.</p>
+          </div>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 400ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot filled"></div></div>
+          <div class="module-card flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-primary">05</span>
+              <h3 class="text-sm font-medium">Simple Data Analysis Tools</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Hands-on experience with tools for data cleaning, transformation, and exploratory data analysis (EDA).</p>
+          </div>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 500ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot"></div></div>
+          <div class="module-card flex-1 border-dashed">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-secondary">06</span>
+              <h3 class="text-sm font-medium text-secondary">Advanced Visualization & Predictive Modeling</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Advanced charts, regression, classification, and building predictive models from scratch.</p>
+          </div>
+        </div>
+
+        <!-- Module 7 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 600ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot"></div></div>
+          <div class="module-card flex-1 border-dashed">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-secondary">07</span>
+              <h3 class="text-sm font-medium text-secondary">Model Evaluation, ML & Deep Learning Intro</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Accuracy, precision, recall, F1-score, confusion matrices, neural networks basics, and building with simple tools.</p>
+          </div>
+        </div>
+
+        <!-- Module 8 -->
+        <div class="reveal-on-scroll flex gap-6 md:gap-8 items-start" style="transition-delay: 700ms">
+          <div class="hidden md:flex items-start pt-1"><div class="timeline-dot"></div></div>
+          <div class="module-card flex-1 border-dashed">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-xs font-medium text-secondary">08</span>
+              <h3 class="text-sm font-medium text-secondary">Career Paths in Data Science</h3>
+            </div>
+            <p class="text-xs text-secondary leading-relaxed ml-11">Exploring roles like Data Analyst, Data Scientist, ML Engineer, and what skills each path demands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="reveal-on-scroll flex items-center justify-center gap-6 mt-10">
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-primary border-2 border-primary"></div>
+        <span class="text-xs text-secondary">Foundations</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full border-2 border-primary bg-surface"></div>
+        <span class="text-xs text-secondary">Advanced</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: BIG DATA OVERVIEW ==================== -->
+<section class="slide-section flex items-center py-24 md:py-32" id="slide-3">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12 w-full">
+    <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+      <!-- Left: Visual -->
+      <div class="reveal-on-scroll order-2 md:order-1">
+        <div class="relative">
+          <div class="rounded-2xl overflow-hidden border border-border shadow-lg shadow-primary/5">
+            <img src="https://picsum.photos/seed/bigdata-server/600/450.jpg" alt="Big Data" class="w-full h-auto object-cover" loading="lazy">
+          </div>
+          <div class="absolute -bottom-6 -right-6 bg-white border border-border rounded-xl p-4 shadow-lg shadow-primary/5 float-anim" style="animation-delay: 0.5s">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center">
+                <span class="iconify text-primary" data-icon="mdi:lightning-bolt" data-width="22"></span>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-primary">Real-Time</div>
+                <div class="text-[10px] text-secondary">Stream Processing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Text -->
+      <div class="reveal-on-scroll order-1 md:order-2" style="transition-delay: 200ms">
+        <div class="relative">
+          <span class="slide-number" style="right: auto; left: -20px;">02</span>
+          <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-4 relative z-10">COURSE TWO</span>
+        </div>
+        <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-4 relative z-10">Big Data</h2>
+        <p class="text-secondary font-light text-sm leading-relaxed mb-8 relative z-10">
+          Focused on data processing frameworks — learning how to handle massive, high-velocity data streams using industry-standard tools that power real-time analytics at scale.
+        </p>
+
+        <div class="space-y-4 relative z-10">
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-white border border-border">
+            <span class="iconify text-primary flex-shrink-0" data-icon="mdi:alpha-k-box" data-width="24"></span>
+            <div>
+              <div class="text-sm font-medium">Apache Kafka</div>
+              <div class="text-xs text-secondary">Distributed event streaming platform</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-white border border-border">
+            <span class="iconify text-primary flex-shrink-0" data-icon="mdi:weather-lightning" data-width="24"></span>
+            <div>
+              <div class="text-sm font-medium">Apache Storm</div>
+              <div class="text-xs text-secondary">Real-time distributed computation system</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-lg bg-white border border-border">
+            <span class="iconify text-primary flex-shrink-0" data-icon="mdi:arrow-decision" data-width="24"></span>
+            <div>
+              <div class="text-sm font-medium">Apache Flink</div>
+              <div class="text-xs text-secondary">Stateful computations over data streams</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: FRAMEWORKS DEEP DIVE ==================== -->
+<section class="slide-section py-24 md:py-32" id="slide-4">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12">
+    <div class="reveal-on-scroll text-center mb-16">
+      <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-4">DEEP DIVE</span>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-3">Framework Comparison</h2>
+      <p class="text-secondary font-light text-sm max-w-lg mx-auto">Each framework has unique strengths. Here's how they differ and where they're used in the real world.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Kafka -->
+      <div class="framework-card reveal-on-scroll">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl bg-surface flex items-center justify-center">
+            <span class="iconify text-primary" data-icon="mdi:alpha-k-box" data-width="28"></span>
+          </div>
+          <div>
+            <h3 class="text-base font-medium">Apache Kafka</h3>
+            <span class="text-[10px] tracking-[0.1em] uppercase text-secondary">Event Streaming</span>
+          </div>
+        </div>
+        <p class="text-xs text-secondary leading-relaxed mb-5">
+          A distributed platform for publishing, subscribing to, storing, and processing streams of records in real time. Acts as a central nervous system for data pipelines.
+        </p>
+        <div class="mb-5">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Key Concepts</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag text-[10px] py-1 px-2.5">Topics</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Partitions</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Producers</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Consumers</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Brokers</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-border/50">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Use Cases</div>
+          <ul class="space-y-1.5">
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Log aggregation & monitoring
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Real-time analytics pipelines
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Event-driven microservices
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Storm -->
+      <div class="framework-card reveal-on-scroll" style="transition-delay: 150ms">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl bg-surface flex items-center justify-center">
+            <span class="iconify text-primary" data-icon="mdi:weather-lightning" data-width="28"></span>
+          </div>
+          <div>
+            <h3 class="text-base font-medium">Apache Storm</h3>
+            <span class="text-[10px] tracking-[0.1em] uppercase text-secondary">Stream Processing</span>
+          </div>
+        </div>
+        <p class="text-xs text-secondary leading-relaxed mb-5">
+          A distributed real-time computation system that processes unbounded streams of data with guaranteed processing of each tuple — similar to Hadoop but for real-time.
+        </p>
+        <div class="mb-5">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Key Concepts</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag text-[10px] py-1 px-2.5">Spouts</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Bolts</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Tuples</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Topologies</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Streams</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-border/50">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Use Cases</div>
+          <ul class="space-y-1.5">
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Real-time fraud detection
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Social media trend analysis
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              IoT sensor data processing
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Flink -->
+      <div class="framework-card reveal-on-scroll" style="transition-delay: 300ms">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 rounded-xl bg-surface flex items-center justify-center">
+            <span class="iconify text-primary" data-icon="mdi:arrow-decision" data-width="28"></span>
+          </div>
+          <div>
+            <h3 class="text-base font-medium">Apache Flink</h3>
+            <span class="text-[10px] tracking-[0.1em] uppercase text-secondary">Stateful Streams</span>
+          </div>
+        </div>
+        <p class="text-xs text-secondary leading-relaxed mb-5">
+          A unified stream-processing and batch-processing framework with true event-time processing and state management — designed for high-throughput, low-latency applications.
+        </p>
+        <div class="mb-5">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Key Concepts</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag text-[10px] py-1 px-2.5">DataStreams</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">State</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Windows</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Checkpoints</span>
+            <span class="skill-tag text-[10px] py-1 px-2.5">Savepoints</span>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-border/50">
+          <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-2">Use Cases</div>
+          <ul class="space-y-1.5">
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Complex event processing (CEP)
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              ETL pipelines at scale
+            </li>
+            <li class="flex items-start gap-2 text-xs text-accent">
+              <span class="iconify text-secondary mt-0.5 flex-shrink-0" data-icon="mdi:chevron-right" data-width="14"></span>
+              Anomaly detection in real-time
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison note -->
+    <div class="reveal-on-scroll mt-10 p-5 rounded-xl bg-white border border-border max-w-2xl mx-auto text-center">
+      <span class="iconify text-secondary mx-auto mb-2" data-icon="mdi:lightbulb-outline" data-width="20"></span>
+      <p class="text-xs text-secondary leading-relaxed">
+        <strong class="text-primary">Key takeaway:</strong> Kafka excels as a message broker / event log, Storm focuses on real-time tuple processing with guaranteed delivery, and Flink provides advanced stateful stream processing with event-time semantics. Often used <em>together</em> in a modern data stack.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: SKILLS & CAREERS ==================== -->
+<section class="slide-section py-24 md:py-32" id="slide-5">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12">
+    <div class="reveal-on-scroll text-center mb-16">
+      <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-4">SKILLS ACQUIRED</span>
+      <h2 class="font-serif text-3xl md:text-4xl tracking-tight mb-3">Skills & Career Paths</h2>
+      <p class="text-secondary font-light text-sm max-w-lg mx-auto">The skills from these courses open doors to several high-demand career paths in the data ecosystem.</p>
+    </div>
+
+    <!-- Skills grid -->
+    <div class="reveal-on-scroll mb-16">
+      <div class="text-[10px] uppercase tracking-[0.1em] text-secondary mb-4 text-center">Technical Skills</div>
+      <div class="flex flex-wrap justify-center gap-2">
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:language-python" data-width="14"></span> Python</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:chart-bar" data-width="14"></span> Data Visualization</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:function-variant" data-width="14"></span> Statistics</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:table" data-width="14"></span> Descriptive Analytics</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:trending-up" data-width="14"></span> Predictive Modeling</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:brain" data-width="14"></span> Machine Learning</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:network" data-width="14"></span> Deep Learning Basics</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:alpha-k-box" data-width="14"></span> Apache Kafka</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:weather-lightning" data-width="14"></span> Apache Storm</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:arrow-decision" data-width="14"></span> Apache Flink</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:database-cog" data-width="14"></span> Data Processing</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:speedometer" data-width="14"></span> Real-Time Analytics</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:sort" data-width="14"></span> Sorting Algorithms</span>
+        <span class="skill-tag"><span class="iconify" data-icon="mdi:calculator-variant" data-width="14"></span> Model Evaluation</span>
+      </div>
+    </div>
+
+    <!-- Career cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="career-card reveal-on-scroll">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:chart-box" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">Data Analyst</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Analyze datasets to find trends, create dashboards, and present insights to stakeholders.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">SQL</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Visualization</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Statistics</span>
+        </div>
+      </div>
+
+      <div class="career-card reveal-on-scroll" style="transition-delay: 100ms">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:flask" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">Data Scientist</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Build ML models, run experiments, and extract predictive insights from complex data.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Python</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">ML</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Deep Learning</span>
+        </div>
+      </div>
+
+      <div class="career-card reveal-on-scroll" style="transition-delay: 200ms">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:cog-transfer" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">ML Engineer</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Deploy and scale ML models in production, build data pipelines and APIs.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">MLOps</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Python</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Cloud</span>
+        </div>
+      </div>
+
+      <div class="career-card reveal-on-scroll" style="transition-delay: 300ms">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:server" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">Big Data Engineer</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Design and maintain large-scale data processing systems using Kafka, Flink, and more.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Kafka</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Flink</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Spark</span>
+        </div>
+      </div>
+
+      <div class="career-card reveal-on-scroll" style="transition-delay: 400ms">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:rocket-launch" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">Data Platform Engineer</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Build the infrastructure that enables real-time and batch data processing at scale.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Storm</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">Kafka</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">DevOps</span>
+        </div>
+      </div>
+
+      <div class="career-card reveal-on-scroll" style="transition-delay: 500ms">
+        <div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center mb-4">
+          <span class="iconify text-primary" data-icon="mdi:brain" data-width="22"></span>
+        </div>
+        <h3 class="text-sm font-medium mb-1">Deep Learning Engineer</h3>
+        <p class="text-xs text-secondary leading-relaxed mb-3">Design neural network architectures for NLP, computer vision, and generative AI.</p>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">PyTorch</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">TensorFlow</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-surface text-secondary">CNN/RNN</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: SUMMARY ==================== -->
+<section class="slide-section flex items-center justify-center relative" id="slide-6">
+  <div class="absolute top-32 right-20 w-72 h-72 bg-border/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 left-20 w-60 h-60 bg-border/15 rounded-full blur-3xl"></div>
+
+  <div class="max-w-[800px] mx-auto px-6 md:px-12 text-center relative z-10">
+    <div class="reveal-on-scroll">
+      <span class="inline-block text-[10px] font-medium tracking-[0.15em] uppercase text-secondary mb-6">WRAPPING UP</span>
+
+      <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-[1.1] mb-6">
+        From foundations<br>to <span class="italic">real-world</span> skills
+      </h2>
+
+      <p class="text-secondary font-light text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-10">
+        These two free Springboard courses gave me a solid grounding in both the analytical and infrastructure sides of data — from Python and statistics to Kafka and real-time stream processing.
+      </p>
+
+      <!-- Summary cards -->
+      <div class="grid sm:grid-cols-2 gap-4 mb-12">
+        <div class="p-6 rounded-xl bg-white border border-border text-left">
+          <span class="iconify text-primary mb-3" data-icon="mdi:school" data-width="24"></span>
+          <h3 class="text-sm font-medium mb-1">Data Science</h3>
+          <p class="text-xs text-secondary leading-relaxed">8 modules covering everything from Python basics to deep learning introductions and career planning.</p>
+        </div>
+        <div class="p-6 rounded-xl bg-white border border-border text-left">
+          <span class="iconify text-primary mb-3" data-icon="mdi:server-network" data-width="24"></span>
+          <h3 class="text-sm font-medium mb-1">Big Data</h3>
+          <p class="text-xs text-secondary leading-relaxed">3 industry frameworks — Kafka, Storm, and Flink — with real-world use cases and architectural understanding.</p>
+        </div>
+      </div>
+
+      <!-- Platform badge -->
+      <div class="inline-flex items-center gap-4 px-6 py-4 rounded-full bg-white border border-border">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-surface flex items-center justify-center">
+            <span class="iconify text-primary" data-icon="mdi:springboard" data-width="20"></span>
+          </div>
+          <div class="text-left">
+            <div class="text-xs font-medium text-primary">Springboard</div>
+            <div class="text-[10px] text-secondary">Free Courses</div>
+          </div>
+        </div>
+        <div class="w-px h-8 bg-border"></div>
+        <div class="text-left">
+          <div class="text-xs font-medium text-green-500 flex items-center gap-1">
+            <span class="iconify" data-icon="mdi:check-circle" data-width="14"></span>
+            Completed
+          </div>
+          <div class="text-[10px] text-secondary">2 of 2 courses</div>
+        </div>
+      </div>
+
+      <!-- Keyboard hint -->
+      <div class="mt-8 flex items-center justify-center gap-2 text-secondary">
+        <span class="kbd">↑</span>
+        <span class="kbd">↓</span>
+        <span class="text-xs">or scroll to navigate</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-8 border-t border-border/50">
+  <div class="max-w-[1200px] mx-auto px-6 md:px-12 text-center">
+    <p class="text-xs text-secondary">
+      Presentation built to showcase Springboard course completion • Data Science & Big Data
+    </p>
+  </div>
+</footer>
+
+<script>
+// ========== Scroll Reveal ==========
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+// ========== Progress Bar ==========
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  progressBar.style.width = progress + '%';
+});
+
+// ========== Nav Dots ==========
+const slides = document.querySelectorAll('.slide-section');
+const dots = document.querySelectorAll('.nav-dot');
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const slideIndex = dot.getAttribute('data-slide');
+    document.getElementById(`slide-${slideIndex}`).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+function updateActiveDot() {
+  let currentSlide = 0;
+  slides.forEach((slide, index) => {
+    const rect = slide.getBoundingClientRect();
+    if (rect.top <= window.innerHeight / 2) {
+      currentSlide = index;
+    }
+  });
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentSlide);
+  });
+}
+window.addEventListener('scroll', updateActiveDot);
+
+// ========== Keyboard Navigation ==========
+let currentSlideIndex = 0;
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+    e.preventDefault();
+    currentSlideIndex = Math.min(currentSlideIndex + 1, slides.length - 1);
+    slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+  } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    e.preventDefault();
+    currentSlideIndex = Math.max(currentSlideIndex - 1, 0);
+    slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+// Keep currentSlideIndex in sync with scroll
+window.addEventListener('scroll', () => {
+  slides.forEach((slide, index) => {
+    const rect = slide.getBoundingClientRect();
+    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+      currentSlideIndex = index;
+    }
+  });
+});
+</script>
+</body>
+</html>s
